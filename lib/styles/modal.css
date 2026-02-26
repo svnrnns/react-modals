@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* Custom properties - consumers can override */
+:root {
+  --modal-bg: #fff;
+  --modal-bg-border: transparent;
+  --modal-padding: 1rem;
+  --modal-gap: 1rem;
+  --modal-title-color: #0f172a;
+  --modal-title-font-size: 1rem;
+  --modal-title-line-height: 1;
+  --modal-border-radius: 0.5rem;
+  --modal-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.3);
+  --modal-overlay-blur-filter: blur(8px);
+  --modal-dim-filter: brightness(0.85);
+  --modal-duration: 200ms;
+  --modal-close-size: 1.75rem;
+  --modal-close-padding: 0.25rem;
+  --modal-close-border-radius: 0.5rem;
+  --modal-close-bg: transparent;
+  --modal-close-hover-bg: rgba(0, 0, 0, 0.05);
+  --modal-close-color: #3e4658;
+  --modal-close-hover-color: #0f172a;
+}
+
+/* Overlay */
+.modals-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--modal-overlay-bg);
+  -webkit-backdrop-filter: var(--modal-overlay-blur-filter, blur(4px));
+  backdrop-filter: var(--modal-overlay-blur-filter, blur(4px));
+  animation: modals-overlay-in var(--modal-duration) ease-out forwards;
+}
+
+.modals-overlay.modals-overlay-exit {
+  animation: modals-overlay-out var(--modal-duration) ease-in forwards;
+}
+
+@keyframes modals-overlay-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modals-overlay-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* Modal wrapper (centered, one per layer) */
+.modals-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.modals-layer>* {
+  pointer-events: auto;
+}
+
+/* Modal box */
+.modals-frame {
+  position: relative;
+  background: var(--modal-bg);
+  border: 1px solid var(--modal-bg-border);
+  border-radius: var(--modal-border-radius);
+  box-shadow: var(--modal-shadow);
+  padding: var(--modal-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--modal-gap);
+  max-width: min(90vw, 90dvw);
+  max-height: min(90vh, 90dvh);
+  overflow: auto;
+  animation: modals-frame-in var(--modal-duration) ease-in-out forwards;
+}
+
+.modals-frame.modals-frame-exit {
+  animation: modals-frame-out var(--modal-duration) ease-in-out forwards;
+}
+
+.modals-frame.modals-frame-dim {
+  filter: var(--modal-dim-filter);
+}
+
+@keyframes modals-frame-in {
+  from {
+    opacity: 0;
+    transform: scale(0.975);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modals-frame-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.975);
+  }
+}
+
+.modals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--modal-gap);
+  padding-right: calc(var(--modal-close-size) + var(--modal-close-padding) * 2);
+}
+
+.modals-title {
+  color: var(--modal-title-color);
+  font-size: var(--modal-title-font-size);
+  line-height: var(--modal-title-line-height);
+  font-weight: 600;
+  margin: 0;
+}
+
+.modals-close {
+  position: absolute;
+  top: calc(var(--modal-padding) * 0.6);
+  right: calc(var(--modal-padding) * 0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
+  padding: var(--modal-close-padding);
+  border: none;
+  border-radius: var(--modal-close-border-radius);
+  background: var(--modal-close-bg);
+  color: var(--modal-close-color);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s, color 0.15s;
+  outline: none;
+  box-shadow: none;
+}
+
+.modals-close:hover,
+.modals-close:focus,
+.modals-close:focus-visible {
+  background: var(--modal-close-hover-bg);
+  color: var(--modal-close-hover-color);
+  outline: none;
+  box-shadow: none;
+}
+
+.modals-content {
+  flex: 1;
+  min-height: 0;
+}
+
+.modals-footer {
+  /* No extra padding, border or background - shadcn style */
+}

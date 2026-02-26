@@ -1,0 +1,69 @@
+{
+  "name": "@svnrnns/react-modals",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Modal stack manager for React",
+  "type": "module",
+  "main": "./dist/modals.cjs",
+  "module": "./dist/modals.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/modals.js",
+      "require": "./dist/modals.cjs"
+    },
+    "./styles.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run clean && npm run build",
+    "clean": "rm -rf dist",
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest run",
+    "test:verbose": "vitest run --reporter=verbose"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "jsdom": "^25.0.0",
+    "vitest": "^2.1.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.0.0"
+  },
+  "keywords": [
+    "react",
+    "modal",
+    "next.js",
+    "stack"
+  ],
+  "author": "seven rings (https://twitter.com/svnrnns)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svnrnns/react-modals"
+  },
+  "homepage": "https://github.com/svnrnns/react-modals",
+  "bugs": {
+    "url": "https://github.com/svnrnns/react-modals/issues"
+  },
+  "license": "ISC"
+}
