@@ -18,6 +18,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "**/*.css"
   ],
@@ -59,7 +62,7 @@
   "author": "seven rings (https://twitter.com/svnrnns)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/svnrnns/react-modals"
+    "url": "git+https://github.com/svnrnns/react-modals.git"
   },
   "homepage": "https://github.com/svnrnns/react-modals",
   "bugs": {
