@@ -5,6 +5,7 @@ export { pushModal, popModal, closeAllModals, closeModalById, } from "./api.js";
 export type {
   PushModalOptions,
   ModalFooterOptions,
+  ModalFooterComponentProps,
   ModalItem,
   ModalComponentProps,
   ModalPhase,

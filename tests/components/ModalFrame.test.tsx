@@ -68,7 +68,7 @@ describe("ModalFrame", () => {
   });
 
   it("renders footer when footer option is provided", () => {
-    function FooterComp({ text }: { text: string }) {
+    function FooterComp({ text }: { text: string; closeModal: () => void }) {
       return <span data-testid="footer-text">{text}</span>;
     }
     const item = createItem({
@@ -76,6 +76,21 @@ describe("ModalFrame", () => {
     });
     const { container } = render(<ModalFrame item={item} isTop={true} />);
     expect(within(container).getByTestId("footer-text")).toHaveTextContent("Footer content");
+  });
+
+  it("passes closeModal to footer component", () => {
+    function FooterWithClose({ closeModal }: { closeModal: () => void }) {
+      return (
+        <button type="button" onClick={closeModal}>
+          Close from footer
+        </button>
+      );
+    }
+    const item = createItem({
+      footer: { component: FooterWithClose },
+    });
+    const { container } = render(<ModalFrame item={item} isTop={true} />);
+    expect(within(container).getByRole("button", { name: /close from footer/i })).toBeInTheDocument();
   });
 
   it("applies modals-frame-dim when not top", () => {

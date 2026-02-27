@@ -1,9 +1,7 @@
-@import "tailwindcss";
-
 /* Custom properties - consumers can override */
 :root {
   --modal-bg: #fff;
-  --modal-bg-border: transparent;
+  --modal-border: 1px solid transparent;
   --modal-padding: 1rem;
   --modal-gap: 1rem;
   --modal-title-color: #0f172a;
@@ -22,6 +20,9 @@
   --modal-close-hover-bg: rgba(0, 0, 0, 0.05);
   --modal-close-color: #3e4658;
   --modal-close-hover-color: #0f172a;
+  --modal-max-width: min(90vw, 90dvw);
+  --modal-max-height: min(95vh, 95dvh);
+  --modal-footer-padding: var(--modal-padding);
 }
 
 /* Overlay */
@@ -78,16 +79,15 @@
 .modals-frame {
   position: relative;
   background: var(--modal-bg);
-  border: 1px solid var(--modal-bg-border);
+  border: var(--modal-border);
   border-radius: var(--modal-border-radius);
   box-shadow: var(--modal-shadow);
-  padding: var(--modal-padding);
   display: flex;
   flex-direction: column;
   gap: var(--modal-gap);
-  max-width: min(90vw, 90dvw);
-  max-height: min(90vh, 90dvh);
-  overflow: auto;
+  max-width: var(--modal-max-width);
+  max-height: var(--modal-max-height);
+  overflow: hidden;
   animation: modals-frame-in var(--modal-duration) ease-in-out forwards;
 }
 
@@ -123,12 +123,24 @@
   }
 }
 
+/* Body: header + content (footer is sibling outside this flex) */
+.modals-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--modal-gap);
+  position: relative;
+}
+
 .modals-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--modal-gap);
-  padding-right: calc(var(--modal-close-size) + var(--modal-close-padding) * 2);
+  padding: var(--modal-padding);
+  padding-right: calc(var(--modal-padding) * 0.6 + var(--modal-close-size) + var(--modal-close-padding) * 2);
+  padding-bottom: 0;
 }
 
 .modals-title {
@@ -172,8 +184,19 @@
 .modals-content {
   flex: 1;
   min-height: 0;
+  padding: 0 var(--modal-padding) var(--modal-padding);
+}
+
+/* When there is a footer, no bottom padding on content (gap between body and footer is enough) */
+.modals-frame.modals-frame-has-footer .modals-content {
+  padding-bottom: 0;
+}
+
+/* When there is no header, content needs top padding */
+.modals-body>.modals-content:first-child {
+  padding-top: var(--modal-padding);
 }
 
 .modals-footer {
-  /* No extra padding, border or background - shadcn style */
+  padding: var(--modal-footer-padding);
 }

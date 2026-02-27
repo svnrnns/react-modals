@@ -9,13 +9,20 @@ import type { ComponentType } from "react";
 export type ModalPhase = "entering" | "entered" | "exiting";
 
 /**
- * Options for rendering a custom footer inside the modal.
- * @template P - Props type of the footer component
+ * Props passed to the footer component. Includes all custom props plus the injected `closeModal` function.
+ * @template T - Custom props type of the footer component
  */
-export interface ModalFooterOptions<P = unknown> {
-  /** React component to render in the footer */
-  component: ComponentType<P>;
-  /** Props passed to the footer component */
+export type ModalFooterComponentProps<T = object> = T & { closeModal: () => void };
+
+/**
+ * Options for rendering a custom footer inside the modal.
+ * The footer component receives props plus closeModal (same as the modal content).
+ * @template P - Props type of the footer component (excluding closeModal)
+ */
+export interface ModalFooterOptions<P = object> {
+  /** React component to render in the footer. Receives props plus `closeModal`. */
+  component: ComponentType<ModalFooterComponentProps<P>>;
+  /** Props passed to the footer component. Type is inferred from the component. */
   props?: P;
   /** Optional class name for the footer wrapper */
   className?: string;
@@ -37,7 +44,7 @@ export interface ModalItem<P = unknown> {
   className?: string;
   title?: string;
   hideHeader?: boolean;
-  footer?: ModalFooterOptions;
+  footer?: ModalFooterOptions<any>;
   onClose?: () => void;
   disableClickOutside?: boolean;
   disableEsc?: boolean;
@@ -55,8 +62,9 @@ export type ModalComponentProps<T = object> = T & { closeModal: () => void };
 /**
  * Options for {@link pushModal}. Props are inferred from the component when using generics.
  * @template T - Props type of the modal content component (excluding closeModal)
+ * @template F - Props type of the footer component (excluding closeModal)
  */
-export interface PushModalOptions<T = object> {
+export interface PushModalOptions<T = object, F = object> {
   /** React component to render as the modal body. Receives props plus `closeModal`. */
   component: ComponentType<ModalComponentProps<T>>;
   /** Props passed to the component. Type is inferred from the component. */
@@ -71,8 +79,8 @@ export interface PushModalOptions<T = object> {
   title?: string;
   /** If true, header (title + close button) is hidden */
   hideHeader?: boolean;
-  /** Optional footer configuration */
-  footer?: ModalFooterOptions;
+  /** Optional footer configuration. Footer props are inferred from component/props. */
+  footer?: ModalFooterOptions<F>;
   /** Callback when the modal is closed */
   onClose?: () => void;
   /** If true, clicking the backdrop does not close the modal */

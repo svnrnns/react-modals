@@ -79,7 +79,7 @@ TypeScript infers `props` from your component, so `props: { name: "World" }` is 
 - **hideHeader** – If `true`, the header (title + close button) is hidden; close via Escape, click outside, or a button in the content.
 - **width** / **height** – Optional modal size (e.g. `"400px"`, `400`).
 - **className** – Optional class for the modal wrapper.
-- **footer** – Optional `{ component, props?, className? }` for a footer component.
+- **footer** – Optional `{ component, props?, className? }` for a footer component. The footer component receives its props plus **closeModal** (same as the modal content), so you can add close/cancel buttons in the footer.
 - **onClose** – Callback when the modal is closed.
 - **disableClickOutside** – If `true`, clicking the backdrop does not close.
 - **disableEsc** – If `true`, Escape does not close.
@@ -105,8 +105,11 @@ Override these in your app to style modals:
 | Variable                      | Default                               | Description                                              |
 | ----------------------------- | ------------------------------------- | -------------------------------------------------------- |
 | `--modal-bg`                  | `#fff`                                | Modal background                                         |
-| `--modal-bg-border`           | `transparent`                         | Modal border (e.g. `1px solid #e2e8f0` to show a border) |
-| `--modal-padding`             | `1rem`                                | Inner padding                                            |
+| `--modal-border`              | `1px solid transparent`               | Modal border (width, style, color; e.g. `2px solid #e2e8f0`) |
+| `--modal-max-width`           | `min(90vw, 90dvw)`                    | Maximum modal width                                     |
+| `--modal-max-height`          | `min(95vh, 95dvh)`                    | Maximum modal height                                    |
+| `--modal-padding`             | `1rem`                                | Padding for header and content area                      |
+| `--modal-footer-padding`      | `var(--modal-padding)`                | Padding for the footer                                   |
 | `--modal-gap`                 | `1rem`                                | Gap between header, content, footer                      |
 | `--modal-title-color`         | `#0f172a`                             | Title text color                                         |
 | `--modal-title-font-size`     | `1.25rem`                             | Title font size                                          |
@@ -129,6 +132,7 @@ Example:
 
 ```css
 :root {
+  --modal-border: 1px solid #e2e8f0;
   --modal-border-radius: 0.75rem;
   --modal-overlay-blur-filter: blur(8px);
 }

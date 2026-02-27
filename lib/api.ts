@@ -25,7 +25,7 @@ function generateId(): string {
  * const id = pushModal({ component: MyForm, props: { name: "Edit" }, title: "Edit profile" });
  * // later: closeModalById(id);
  */
-export function pushModal<T = object>(options: PushModalOptions<T>): string {
+export function pushModal<T = object, F = object>(options: PushModalOptions<T, F>): string {
   const id = generateId();
   const item: ModalItem = {
     id,

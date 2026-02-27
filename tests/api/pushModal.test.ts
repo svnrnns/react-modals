@@ -94,7 +94,7 @@ describe("pushModal", () => {
   });
 
   it("passes through footer option", () => {
-    function Footer() {
+    function Footer(_props: { x?: number; closeModal: () => void }) {
       return null;
     }
     pushModal({
