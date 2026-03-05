@@ -1,8 +1,8 @@
 {
   "name": "@svnrnns/react-modals",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
-  "description": "Modal stack manager for React",
+  "description": "imperative modal stack manager for React",
   "type": "module",
   "main": "./dist/modals.cjs",
   "module": "./dist/modals.js",

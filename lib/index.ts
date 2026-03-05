@@ -1,6 +1,7 @@
 import "./styles/modal.css";
 
 export { ModalRoot } from "./components/ModalRoot.js";
+export type { ModalRootProps } from "./components/ModalRoot.js";
 export { pushModal, popModal, closeAllModals, closeModalById, } from "./api.js";
 export type {
   PushModalOptions,

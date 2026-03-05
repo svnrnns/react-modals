@@ -1,6 +1,6 @@
 # @svnrnns/react-modals
 
-Modal stack manager for React and Next.js. Open modals imperatively with `pushModal()`; they stack on screen with an overlay, animations, and focus trap.
+Imperative modal stack manager for React. Open modals imperatively with `pushModal()`; they stack on screen with an overlay, animations, and focus trap.
 
 ## Install
 
@@ -27,6 +27,10 @@ export default function RootLayout({ children }) {
   );
 }
 ```
+
+**ModalRoot props:**
+
+- **disableBodyScroll** – When `true`, applies `overflow: hidden` to `document.body` while any modal is open, hiding the body scrollbar. Default: `false` (body scroll is not disabled unless you set this).
 
 2. Import and use `pushModal`, `popModal`, `closeModalById`, and `closeAllModals` anywhere (no context needed).
 
@@ -102,31 +106,31 @@ When a modal is on top, focus is trapped inside it: Tab / Shift+Tab wrap within 
 
 Override these in your app to style modals:
 
-| Variable                      | Default                               | Description                                              |
-| ----------------------------- | ------------------------------------- | -------------------------------------------------------- |
-| `--modal-bg`                  | `#fff`                                | Modal background                                         |
+| Variable                      | Default                               | Description                                                  |
+| ----------------------------- | ------------------------------------- | ------------------------------------------------------------ |
+| `--modal-bg`                  | `#fff`                                | Modal background                                             |
 | `--modal-border`              | `1px solid transparent`               | Modal border (width, style, color; e.g. `2px solid #e2e8f0`) |
-| `--modal-max-width`           | `min(90vw, 90dvw)`                    | Maximum modal width                                     |
-| `--modal-max-height`          | `min(95vh, 95dvh)`                    | Maximum modal height                                    |
-| `--modal-padding`             | `1rem`                                | Padding for header and content area                      |
-| `--modal-footer-padding`      | `var(--modal-padding)`                | Padding for the footer                                   |
-| `--modal-gap`                 | `1rem`                                | Gap between header, content, footer                      |
-| `--modal-title-color`         | `#0f172a`                             | Title text color                                         |
-| `--modal-title-font-size`     | `1.25rem`                             | Title font size                                          |
-| `--modal-title-line-height`   | `1`                                   | Title line height                                        |
-| `--modal-border-radius`       | `0.5rem`                              | Modal corners                                            |
-| `--modal-shadow`              | `0 25px 50px -12px rgb(0 0 0 / 0.25)` | Box shadow                                               |
-| `--modal-overlay-bg`          | `rgba(0, 0, 0, 0.3)`                  | Backdrop color                                           |
-| `--modal-overlay-blur-filter` | `blur(4px)`                           | Backdrop blur (full filter value)                        |
-| `--modal-dim-filter`          | `brightness(0.85)`                    | Filter for modals behind the top one                     |
-| `--modal-duration`            | `150ms`                               | Animation duration                                       |
-| `--modal-close-size`          | `2rem`                                | Close button width and height                            |
-| `--modal-close-padding`       | `0.25rem`                             | Close button padding                                     |
-| `--modal-close-border-radius` | `0.25rem`                             | Close button border radius                               |
-| `--modal-close-bg`            | `transparent`                         | Close button background                                  |
-| `--modal-close-hover-bg`      | `rgba(0, 0, 0, 0.05)`                 | Close button hover background                            |
-| `--modal-close-color`         | `currentColor`                        | Close icon color                                         |
-| `--modal-close-hover-color`   | `currentColor`                        | Close icon hover color                                   |
+| `--modal-max-width`           | `min(90vw, 90dvw)`                    | Maximum modal width                                          |
+| `--modal-max-height`          | `min(95vh, 95dvh)`                    | Maximum modal height                                         |
+| `--modal-padding`             | `1rem`                                | Padding for header and content area                          |
+| `--modal-footer-padding`      | `var(--modal-padding)`                | Padding for the footer                                       |
+| `--modal-gap`                 | `1rem`                                | Gap between header, content, footer                          |
+| `--modal-title-color`         | `#0f172a`                             | Title text color                                             |
+| `--modal-title-font-size`     | `1.25rem`                             | Title font size                                              |
+| `--modal-title-line-height`   | `1`                                   | Title line height                                            |
+| `--modal-border-radius`       | `0.5rem`                              | Modal corners                                                |
+| `--modal-shadow`              | `0 25px 50px -12px rgb(0 0 0 / 0.25)` | Box shadow                                                   |
+| `--modal-overlay-bg`          | `rgba(0, 0, 0, 0.3)`                  | Backdrop color                                               |
+| `--modal-overlay-blur-filter` | `blur(4px)`                           | Backdrop blur (full filter value)                            |
+| `--modal-dim-filter`          | `brightness(0.85)`                    | Filter for modals behind the top one                         |
+| `--modal-duration`            | `150ms`                               | Animation duration                                           |
+| `--modal-close-size`          | `2rem`                                | Close button width and height                                |
+| `--modal-close-padding`       | `0.25rem`                             | Close button padding                                         |
+| `--modal-close-border-radius` | `0.25rem`                             | Close button border radius                                   |
+| `--modal-close-bg`            | `transparent`                         | Close button background                                      |
+| `--modal-close-hover-bg`      | `rgba(0, 0, 0, 0.05)`                 | Close button hover background                                |
+| `--modal-close-color`         | `currentColor`                        | Close icon color                                             |
+| `--modal-close-hover-color`   | `currentColor`                        | Close icon hover color                                       |
 
 Example:
 
