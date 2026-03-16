@@ -3,15 +3,19 @@ import type { ModalItem } from "../types.js";
 import { createCloseModal } from "../api.js";
 import { useFocusTrap } from "../useFocusTrap.js";
 import { updateItemPhase } from "../store.js";
+import { Overlay } from "./Overlay.js";
 
 const ANIMATION_DURATION = 200;
 
 interface ModalFrameProps {
   item: ModalItem;
   isTop: boolean;
+  style?: React.CSSProperties;
+  /** When not top, dim overlay over this frame is exiting (fade-out with top modal) */
+  dimOverlayExiting?: boolean;
 }
 
-export function ModalFrame({ item, isTop }: ModalFrameProps) {
+export function ModalFrame({ item, isTop, style, dimOverlayExiting = false }: ModalFrameProps) {
   const frameRef = useRef<HTMLDivElement>(null);
   const closeModal = useCallback(createCloseModal(item.id), [item.id]);
 
@@ -63,76 +67,88 @@ export function ModalFrame({ item, isTop }: ModalFrameProps) {
       : undefined;
   const sizeStyle = { ...widthStyle, ...heightStyle };
 
-  return createElement(
+  const frameEl = createElement(
     "div",
     {
-      className: "modals-layer",
-      onClick: handleBackdropClick,
-      role: "presentation",
+      ref: frameRef,
+      tabIndex: -1,
+      role: "dialog",
+      "aria-modal": true,
+      "aria-labelledby": item.title && !item.hideHeader ? `modal-title-${item.id}` : undefined,
+      className: `modals-frame ${item.phase === "exiting" ? "modals-frame-exit" : ""} ${!isTop ? "modals-frame-dim" : ""} ${item.footer ? "modals-frame-has-footer" : ""} ${item.className ?? ""}`.trim(),
+      style: sizeStyle,
+      onClick: (e: MouseEvent<HTMLDivElement>) => e.stopPropagation(),
     },
-      createElement(
-        "div",
-        {
-          ref: frameRef,
-          tabIndex: -1,
-          role: "dialog",
-          "aria-modal": true,
-          "aria-labelledby": item.title && !item.hideHeader ? `modal-title-${item.id}` : undefined,
-          className: `modals-frame ${item.phase === "exiting" ? "modals-frame-exit" : ""} ${!isTop ? "modals-frame-dim" : ""} ${item.footer ? "modals-frame-has-footer" : ""} ${item.className ?? ""}`.trim(),
-          style: sizeStyle,
-          onClick: (e: MouseEvent<HTMLDivElement>) => e.stopPropagation(),
-        },
+    createElement(
+      "div",
+      { className: "modals-body" },
+      !item.hideHeader &&
         createElement(
-          "div",
-          { className: "modals-body" },
-          !item.hideHeader &&
-            createElement(
-              "button",
-              {
-                type: "button",
-                "aria-label": "Close",
-                className: "modals-close",
-                onClick: closeModal,
-              },
-              createElement(
-                "svg",
-                {
-                  xmlns: "http://www.w3.org/2000/svg",
-                  width: 20,
-                  height: 20,
-                  viewBox: "0 0 24 24",
-                  fill: "none",
-                  stroke: "currentColor",
-                  strokeWidth: 2,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                  "aria-hidden": true,
-                },
-                createElement("path", { d: "M18 6 6 18" }),
-                createElement("path", { d: "m6 6 12 12" })
-              )
-            ),
-          !item.hideHeader && item.title != null &&
-            createElement(
-              "div",
-              { className: "modals-header" },
-              createElement("h2", { className: "modals-title", id: `modal-title-${item.id}` }, item.title)
-            ),
+          "button",
+          {
+            type: "button",
+            "aria-label": "Close",
+            className: "modals-close",
+            onClick: closeModal,
+          },
           createElement(
-            "div",
-            { className: "modals-content" },
-            createElement(Content, mergedProps)
+            "svg",
+            {
+              xmlns: "http://www.w3.org/2000/svg",
+              width: 20,
+              height: 20,
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              strokeWidth: 2,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              "aria-hidden": true,
+            },
+            createElement("path", { d: "M18 6 6 18" }),
+            createElement("path", { d: "m6 6 12 12" })
           )
         ),
-        item.footer &&
-          createElement(
-            "div",
-            { className: `modals-footer ${item.footer.className ?? ""}`.trim() },
-            createElement(item.footer.component, {
-              ...(typeof item.footer.props === "object" && item.footer.props !== null ? item.footer.props : {}),
-              closeModal,
-            })
-          )
+      !item.hideHeader && item.title != null &&
+        createElement(
+          "div",
+          { className: "modals-header" },
+          createElement("h2", { className: "modals-title", id: `modal-title-${item.id}` }, item.title)
+        ),
+      createElement(
+        "div",
+        { className: "modals-content" },
+        createElement(Content, mergedProps)
+      )
+    ),
+    item.footer &&
+      createElement(
+        "div",
+        { className: `modals-footer ${item.footer.className ?? ""}`.trim() },
+        createElement(item.footer.component, {
+          ...(typeof item.footer.props === "object" && item.footer.props !== null ? item.footer.props : {}),
+          closeModal,
+        })
       )
   );
+
+  const showDimOverlay = !isTop || dimOverlayExiting;
+  const layerContent = createElement(
+    "div",
+    { className: "modals-layer-frame-wrap" },
+    frameEl,
+    showDimOverlay &&
+      createElement(Overlay, {
+        dimOnly: true,
+        inner: true,
+        exiting: dimOverlayExiting,
+      })
+  );
+
+  return createElement("div", {
+    className: "modals-layer",
+    onClick: handleBackdropClick,
+    role: "presentation",
+    style,
+  }, layerContent);
 }

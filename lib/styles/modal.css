@@ -25,7 +25,7 @@
   --modal-footer-padding: var(--modal-padding);
 }
 
-/* Overlay */
+/* Overlay (global: with blur; dim: same bg, no blur for non-top modals) */
 .modals-overlay {
   position: fixed;
   inset: 0;
@@ -34,6 +34,19 @@
   -webkit-backdrop-filter: var(--modal-overlay-blur-filter, blur(4px));
   backdrop-filter: var(--modal-overlay-blur-filter, blur(4px));
   animation: modals-overlay-in var(--modal-duration) ease-out forwards;
+}
+
+.modals-overlay.modals-overlay-dim {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* Dim overlay inside modal layer: only covers the frame, not the whole viewport */
+.modals-overlay.modals-overlay-inner {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: var(--modal-border-radius);
 }
 
 .modals-overlay.modals-overlay-exit {
@@ -69,6 +82,14 @@
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+}
+
+/* Wraps frame + dim overlay so overlay only covers the frame (non-top modals) */
+.modals-layer-frame-wrap {
+  position: relative;
+  display: inline-flex;
+  max-width: var(--modal-max-width);
+  max-height: var(--modal-max-height);
 }
 
 .modals-layer>* {
