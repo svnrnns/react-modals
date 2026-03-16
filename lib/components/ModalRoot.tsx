@@ -30,14 +30,48 @@ export function ModalRoot({ disableBodyScroll = false }: ModalRootProps = {}) {
     return subscribe(() => setStack([...getStack()]));
   }, []);
 
+  const scrollLockRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!disableBodyScroll || typeof document === "undefined") return;
-    const { body } = document;
+    const { documentElement: html, body } = document;
     if (stack.length > 0) {
-      const prev = body.style.overflow;
+      const scrollY = window.scrollY ?? window.pageYOffset;
+      scrollLockRef.current = scrollY;
+
+      const prevHtmlOverflow = html.style.overflow;
+      const prevHtmlPosition = html.style.position;
+      const prevHtmlTop = html.style.top;
+      const prevHtmlWidth = html.style.width;
+      const prevBodyOverflow = body.style.overflow;
+      const prevBodyPosition = body.style.position;
+      const prevBodyTop = body.style.top;
+      const prevBodyLeft = body.style.left;
+      const prevBodyWidth = body.style.width;
+
+      html.style.overflow = "hidden";
+      html.style.position = "fixed";
+      html.style.top = `-${scrollY}px`;
+      html.style.width = "100%";
       body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.top = `-${scrollY}px`;
+      body.style.left = "0";
+      body.style.width = "100%";
+
       return () => {
-        body.style.overflow = prev;
+        html.style.overflow = prevHtmlOverflow;
+        html.style.position = prevHtmlPosition;
+        html.style.top = prevHtmlTop;
+        html.style.width = prevHtmlWidth;
+        body.style.overflow = prevBodyOverflow;
+        body.style.position = prevBodyPosition;
+        body.style.top = prevBodyTop;
+        body.style.left = prevBodyLeft;
+        body.style.width = prevBodyWidth;
+        const y = scrollLockRef.current ?? 0;
+        scrollLockRef.current = null;
+        window.scrollTo(0, y);
       };
     }
   }, [disableBodyScroll, stack.length]);
